@@ -1,3 +1,7 @@
+MailZu 0.9.4-github-gnafixes (30.04.2019):
+----------
+- Fixed quarantine not displaying message with db set to mysqli and using binquar = 1
+
 MailZu 0.9.3-github-gnafixes (09.10.2018):
 ----------
 Mobile responsive, and usability changes:

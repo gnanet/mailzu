@@ -253,7 +253,7 @@ class DBEngine
         $recipEmailClause = $this->convertEmailaddresses2SQL($emailaddresses);
 
         # mysql seems to run faster with a left join
-        if ($conf['db']['dbType'] == 'mysql') {
+        if (($conf['db']['dbType'] == 'mysql') || ($conf['db']['dbType'] == 'mysqli')) {
             $join_type = ' LEFT JOIN';
         } else {
             $join_type = ' INNER JOIN';
@@ -379,7 +379,7 @@ class DBEngine
         global $conf;
 
         # MySQL seems to run faster with a LEFT JOIN
-        if ($conf['db']['dbType'] == 'mysql') {
+        if (($conf['db']['dbType'] == 'mysql') || ($conf['db']['dbType'] == 'mysqli')) {
             $join_type = ' LEFT JOIN';
         } else {
             $join_type = ' INNER JOIN';
@@ -518,7 +518,7 @@ class DBEngine
         global $conf;
 
         # MySQL seems to run faster with a LEFT JOIN
-        if ($conf['db']['dbType'] == 'mysql') {
+        if (($conf['db']['dbType'] == 'mysql') || ($conf['db']['dbType'] == 'mysqli')) {
             $join_type = ' LEFT JOIN';
         } else {
             $join_type = ' INNER JOIN';
@@ -638,7 +638,7 @@ class DBEngine
         # If using the bytea or BLOB type for sql quarantine use proper conversion
         # (since amavisd 2.4.4
         if ($conf['db']['binquar']) {
-            if ($conf['db']['dbType'] == 'mysql') {
+            if (($conf['db']['dbType'] == 'mysql') || ($conf['db']['dbType'] == 'mysqli')) {
                 $mail_text_column = ' CONVERT(mail_text USING utf8) AS mail_text';
             } else {
                 $mail_text_column = " encode(mail_text,'escape') AS mail_text";
