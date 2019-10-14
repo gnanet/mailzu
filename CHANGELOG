@@ -1,3 +1,9 @@
+MailZu 0.9.5-github-gnafixes (14.10.2019):
+----------
+- Added polish translation from FreeBSD Ports, credits go to Krzysztof <ports@bsdserwis.com>
+  Translation was suggested by @kkmaslowski
+- updated config/init.php to reflect the version change
+
 MailZu 0.9.4-github-gnafixes (30.04.2019):
 ----------
 - Fixed quarantine not displaying message with db set to mysqli and using binquar = 1
