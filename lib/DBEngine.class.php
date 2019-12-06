@@ -711,9 +711,25 @@ class DBEngine
     function cleanRow($data)
     {
         $rval = array();
+        $binary_cols_arr = array('mail_id','secret_id');
+        $possible_binary_cols_arr = array('quar_loc','email');
 
-        foreach ($data as $key => $val)
+        foreach ($data as $key => $val) {
+            if ( in_array($key,$possible_binary_cols_arr) ) {
+                CmnFns::write_log("Key ".$key." contains possible a binary value ".implode(' ',print_r($val,true)));
+            }
+            if ( in_array($key,$binary_cols_arr) ) {
+                CmnFns::write_log("Key ".$key." should have binary value ".implode(' ',print_r($val,true)));
+                if ( preg_match("/([a-f0-9]{24})$/im", $val, $hexfound)) {
+                    CmnFns::write_log("Key ".$key." value ".print_r($val,true))." matched hex ".$hexfound[1];
+                    if ($conf['app']['debug']) {
+                        CmnFns::write_log("Tried to revert to human readable: ".pack("H*",$hexfound[1]));
+                        $val = pack("H*",$hexfound[1]);
+                    }
+                }
+            }
             $rval[$key] = stripslashes($val);
+        }
         return $rval;
     }
 
