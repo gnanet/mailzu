@@ -34,7 +34,7 @@
 // Start the session (do not edit!)
 session_start();
 
-$conf['app']['version'] = '0.9.5-github-gnafixes';
+$conf['app']['version'] = '0.9.6-github-gnafixes';
 $conf['app']['footlink'] = 'https://github.com/gnanet/mailzu';
 
 include_once('constants.php');

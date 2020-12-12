@@ -113,8 +113,7 @@ class DBEngine
                 mysql_set_charset('utf8');
                 break;
             case "mysqli":
-#var_dump($db); exit;
-//                $db->set_charset('utf8');
+                $db->connection->set_charset('utf8');
                 break;
             default:
                 break;

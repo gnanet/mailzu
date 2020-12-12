@@ -66,9 +66,10 @@ $conf['amavisd']['spam_release_port'] = '9998';
 // Set Amavisd-new host, if AM.PDP only allowed over localhost
 //$conf['amavisd']['host'] = '127.0.0.1';
 
-// Database type to be used by PEAR [mysql]
+// Database type to be used by PEAR [mysqli]
 /* Options are:
-	mysql  -> MySQL
+	mysqli -> MySQLi - Should be compatible with php 7.2
+	mysql  -> MySQL - deprecated as 5.6, 7.0
 	pgsql  -> PostgreSQL
 	ibase  -> InterBase
 	msql   -> Mini SQL
@@ -79,7 +80,7 @@ $conf['amavisd']['spam_release_port'] = '9998';
 	ifx    -> Informix
 	fbsql  -> FrontBase
 */
-$conf['db']['dbType'] = 'mysql';
+$conf['db']['dbType'] = 'mysqli';
 
 // Database user who can access the amavisd database
 $conf['db']['dbUser'] = 'user';
@@ -94,8 +95,8 @@ $conf['db']['dbName'] = 'dbname';
 $conf['db']['hostSpec'] = 'hostname.example.com:3306';
 
 // If using the bytea or BLOB mail_text quarantine type set to
-// True. Since amavisd-2.4.4.
-$conf['db']['binquar'] = false;
+// True. Since amavisd-2.4.4 should be default true
+$conf['db']['binquar'] = true;
 
 /**********
 * Authentication Settings
@@ -202,7 +203,8 @@ $conf['auth']['ad_searchPassword'] = 'secret';
 /*** Database Authentication Settings ***/
 // Database type to be used by PEAR
 /* Options are:
-	mysql  -> MySQL
+	mysqli -> MySQLi - Should be compatible with php 7.2
+	mysql  -> MySQL - deprecated as 5.6, 7.0
 	pgsql  -> PostgreSQL
 	ibase  -> InterBase
 	msql   -> Mini SQL
@@ -213,7 +215,7 @@ $conf['auth']['ad_searchPassword'] = 'secret';
 	ifx    -> Informix
 	fbsql  -> FrontBase
 */
-$conf['auth']['dbType'] = 'mysql';
+$conf['auth']['dbType'] = 'mysqli';
 
 // Database host specification (hostname[:port]) [localhost]
 $conf['auth']['dbHostSpec'] = '';
