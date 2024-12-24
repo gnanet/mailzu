@@ -683,7 +683,6 @@ class DBEngine
         return false;
     }
 
-
     /**
      * Return an array of email aliases associated with $loginEmail
      * @param string $loginEmail user's login email address
@@ -693,7 +692,7 @@ class DBEngine
     {
         global $conf;
 
-        $query = sprintf('SELECT aliases FROM '.$this->dbUsersTable.' WHERE aliases IS NOT NULL AND email = %s;', $loginEmail);
+        $query = sprintf("SELECT aliases FROM ".$this->dbUsersTable." WHERE aliases IS NOT NULL AND email = '%s';", $loginEmail);
 
         // Prepare query
         $q = $this->db->prepare($query);
@@ -705,7 +704,7 @@ class DBEngine
         $rval = array();
         $rs = $q->fetchAll();
         if ( empty($rs[0]['aliases']) !== true ) {
-            $rval = explode("'", $rs[0]['aliases']);
+            $rval = explode(",", $rs[0]['aliases']);
         }
         $q->closeCursor();
         return $rval;

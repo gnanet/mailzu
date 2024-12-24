@@ -52,7 +52,6 @@ class IMAPAuth
             $this->imapDomainName = $conf['auth']['imap_domain_name'];
         }
         $this->imapAliasesFromDB = $conf['auth']['imap_use_aliasdb'];
-
     }
 
     // User methods -------------------------------------------
