@@ -14,8 +14,9 @@
 /**
  * Base directory of application
  */
-@define('BASE_DIR', __DIR__ . '/../..');
-
+if ( ! defined('BASE_DIR') ) {
+    @define('BASE_DIR', __DIR__ . '/../..');
+}
 /**
  * Provide all database access/manipulation functionality
  */
@@ -37,6 +38,8 @@ class DBEngine
     // Password for database user
     var $dbPass;
 
+    var $dbUsersTable;
+
     var $err_msg = '';
     var $numRows;
 
@@ -53,7 +56,7 @@ class DBEngine
         $this->dbUser = $conf['db']['dbUser'];
         $this->dbPass = $conf['db']['dbPass'];
         $this->dbHost = $conf['db']['hostSpec'];
-
+        $this->dbUsersTable = $conf['db']['dbUsersTable'];
         $this->db_connect();
     }
 
@@ -680,6 +683,34 @@ class DBEngine
         return false;
     }
 
+
+    /**
+     * Return an array of email aliases associated with $loginEmail
+     * @param string $loginEmail user's login email address
+     * @return array of email addresses, or an empty array
+     */
+    function get_useraliases($loginEmail)
+    {
+        global $conf;
+
+        $query = sprintf('SELECT aliases FROM '.$this->dbUsersTable.' WHERE aliases IS NOT NULL AND email = %s;', $loginEmail);
+
+        // Prepare query
+        $q = $this->db->prepare($query);
+        // Execute query
+        $result = $q->execute();
+        // Check if error
+        $this->check_for_error($result, $q);
+
+        $rval = array();
+        $rs = $q->fetchAll();
+        if ( empty($rs[0]['aliases']) !== true ) {
+            $rval = explode("'", $rs[0]['aliases']);
+        }
+        $q->closeCursor();
+        return $rval;
+    }
+
     /**
      * Strips out slashes for all data in the return row
      * - THIS MUST ONLY BE ONE ROW OF DATA -
@@ -747,14 +778,15 @@ class DBEngine
     {
         global $conf;
         $result = '';
-        $emailtuple = '';
+        $in_sep = "','";
 
-        if (is_array($emailaddresses) && !empty($emailaddresses)) {
-            foreach ($emailaddresses as $value) {
-                // Append an address to lookup
-                $emailtuple .= ($emailtuple != '' ? ", '$value'" : "'$value'");
+        if ( !empty($emailaddresses)) {
+            // the simplest solution if a value is not array but we need an array
+            if (! is_array($emailaddresses)) {
+                $emailaddresses = array( $emailaddresses );
             }
-            $result = " recip.email in ($emailtuple) ";
+            // use implode with a 3letter separator from a variable
+            $result = " recip.email  IN ( '". implode($in_sep, $emailaddresses) ."' ) ";
 
             // Configured to support recipient delimiters?
             if (!empty($conf['recipient_delimiter'])) {

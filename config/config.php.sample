@@ -5,7 +5,7 @@
  *  text sizes, email addresses, etc.
  *  are set in this file.
  *
- * @author Gerely Nagy <gna@r-us.hu>
+ * @author Gergely Nagy <gna@r-us.hu>
  *
  * @package mailzu-ng/config
  */
@@ -60,7 +60,7 @@
 * 
 *
 ***********/
-
+$conf = array();
 // Amavisd-new AM.PDP port
 // Since the port number can not be stored in the database
 // all instances of amavisd-new must use the same AM.PDP port 
@@ -273,6 +273,15 @@ $conf['auth']['imap_type'] = 'imap';
 // Domain name part of the email address, (e.g.: example.com)
 $conf['auth']['imap_domain_name'] = 'example.com';
 
+
+// Name of amavis-sql table that contains the columns 'email' and 'aliases'
+$conf['db']['dbUsersTable'] = 'users';
+
+/*
+ * Use 'dbUsersTable' to retrievie aliases of 'email' by SQL-query if $conf['auth']['serverType'] is set to 'imap'
+ *     If set to true: it requires working $conf['db'] and correctly set $conf['db']['dbUsersTable'] that contains the column 'aliases'
+*/
+$conf['auth']['imap_use_aliasdb'] = false;
 
 /**
 * End of Authentication Settings

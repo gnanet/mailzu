@@ -37,9 +37,11 @@
 /*                   DO NOT CHANGE THIS SECTION                     */
 /********************************************************************/
 // Start the session (do not edit!)
-session_start();
+if (! headers_sent()) {
+    if(session_status() !== PHP_SESSION_ACTIVE) session_start();
+}
 
-$conf['app']['version'] = '0.11.mailzu-ng-php72-194398f+1';
+$conf['app']['version'] = '0.11.mailzu-ng-php72-37e0277+1';
 $conf['app']['footlink'] = 'https://github.com/gnanet/mailzu';
 
 include_once('constants.php');

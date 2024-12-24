@@ -11,8 +11,9 @@
 /**
  * Base directory of application
  */
-@define('BASE_DIR', __DIR__ . '/../..');
-
+if ( ! defined('BASE_DIR') ) {
+    @define('BASE_DIR', __DIR__ . '/../..');
+}
 /**
  * Provide all mail access/manipulation functionality
  */

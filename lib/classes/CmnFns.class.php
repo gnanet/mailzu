@@ -14,7 +14,9 @@
 /**
  * Base directory of application
  */
-@define('BASE_DIR', __DIR__ . '/../..');
+if ( ! defined('BASE_DIR') ) {
+    @define('BASE_DIR', __DIR__ . '/../..');
+}
 
 // Define constants for method getGlobalVar()
 @define('INORDER', 0);
@@ -371,9 +373,9 @@ class CmnFns
      */
     public static function html_activate_links($str)
     {
-        $str = eregi_replace('(((f|ht){1}tp://)[-a-zA-Z0-9@:%_+.~#?&//=]+)', '<a href="\1" target="_blank">\1</a>', $str);
-        $str = eregi_replace('([[:space:]()[{}])(www.[-a-zA-Z0-9@:%_+.~#?&//=]+)', '\1<a href="http://\2" target="_blank">\2</a>', $str);
-        $str = eregi_replace('([_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]{2,3})', '<a href="mailto:\1">\1</a>', $str);
+        $str = preg_replace('/(((f|ht){1}tp:\/\/)[-a-zA-Z0-9@:%_+.~#?&\/\/=]+)/i', '<a href="\1" target="_blank">\1</a>', $str);
+        $str = preg_replace('/([[:space:]()[{}])(www.[-a-zA-Z0-9@:%_+.~#?&\/\/=]+)/i', '\1<a href="http://\2" target="_blank">\2</a>', $str);
+        $str = preg_replace('/([_.0-9a-z-]+@([0-9a-z][0-9a-z-]+.)+[a-z]{2,3})/i', '<a href="mailto:\1">\1</a>', $str);
         return $str;
     }
 

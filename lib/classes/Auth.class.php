@@ -14,7 +14,9 @@
 /**
  * Base directory of application
  */
-@define('BASE_DIR', __DIR__ . '/../..');
+if ( ! defined('BASE_DIR') ) {
+    @define('BASE_DIR', __DIR__ . '/../..');
+}
 /**
  * Include Auth template functions
  */
@@ -273,7 +275,9 @@ class Auth
             if (!empty($cookieVal)) {
                 //die ('Setting cookie');
                 setcookie('ID', $data['logonName'], time() + 2592000, '/');
-                $data['emailAddress'] = array($data['logonName']);
+                if ( ! ( array_key_exists('emailAddress', $data) && is_array($data['emailAddress']) ) ) {
+                    $data['emailAddress'] = array($data['logonName']);
+                }
                 $data['firstName'] = $data['logonName'];
             }
 

@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   `policy_id` int(10) UNSIGNED NOT NULL DEFAULT '1',
   `email` varbinary(255) NOT NULL,
   `fullname` varchar(255) DEFAULT NULL,
+  `aliases` text CHARACTER SET latin1 COLLATE latin1_general_ci NOT NULL COMMENT 'comma separated list',
+  `digest` int(1) DEFAULT NULL COMMENT 'null or 1 for daily',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

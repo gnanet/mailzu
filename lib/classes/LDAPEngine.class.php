@@ -11,8 +11,9 @@
 /**
  * Base directory of application
  */
-@define('BASE_DIR', __DIR__ . '/../..');
-
+if ( ! defined('BASE_DIR') ) {
+    @define('BASE_DIR', __DIR__ . '/../..');
+}
 class LDAPEngine
 {
     // The directory server, tested with OpenLDAP and Active Directory

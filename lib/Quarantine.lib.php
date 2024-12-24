@@ -12,8 +12,9 @@
 /**
  * Base directory of application
  */
-@define('BASE_DIR', __DIR__ . '/..');
-
+if ( ! defined('BASE_DIR') ) {
+@define('BASE_DIR', realpath(__DIR__ . '/..'));
+}
 
 
 /**

@@ -12,8 +12,9 @@
 /**
  * Base directory of application
  */
-@define('BASE_DIR', __DIR__ . '/../..');
-
+if ( ! defined('BASE_DIR') ) {
+    @define('BASE_DIR', __DIR__ . '/../..');
+}
 
 /**
  * Provide all access/communication to Amavisd AM.PDP
@@ -32,11 +33,12 @@ class AmavisdEngine
      */
     function __construct($host)
     {
-        if ($GLOBALS['conf']['amavisd']['host']) {
-            $host = $GLOBALS['conf']['amavisd']['host'];
+        global $conf;
+        if ($conf['conf']['amavisd']['host']) {
+            $host = $conf['conf']['amavisd']['host'];
         }
         $this->socket = new Net_Socket();
-        $this->port = $GLOBALS['conf']['amavisd']['spam_release_port'];
+        $this->port = $conf['conf']['amavisd']['spam_release_port'];
         $this->connected = false;
         $this->last_error = '';
 

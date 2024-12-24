@@ -11,8 +11,9 @@
 /**
  * Base directory of application
  */
-@define('BASE_DIR', __DIR__ . '/../..');
-
+if ( ! defined('BASE_DIR') ) {
+    @define('BASE_DIR', __DIR__ . '/../..');
+}
 /**
  * Provide all database access/manipulation functionality for IMAP Auth
  */
@@ -26,6 +27,15 @@ class IMAPAuth
     // Username
     var $imapUsername;
 
+    //
+    var $imapDomainName;
+
+    // Alias Emails of User
+    var $imapUserAliases = array();
+
+    // Query Amavis SQL for Alias Emails
+    var $imapAliasesFromDB;
+
     var $err_msg = '';
 
     /**
@@ -38,7 +48,11 @@ class IMAPAuth
 
         $this->imapHosts = $conf['auth']['imap_hosts'];
         $this->imapType = $conf['auth']['imap_type'];
-        $this->imapDomainName = $conf['auth']['imap_domain_name'];
+        if ( isset($conf['auth']['imap_domain_name']) ) {
+            $this->imapDomainName = $conf['auth']['imap_domain_name'];
+        }
+        $this->imapAliasesFromDB = $conf['auth']['imap_use_aliasdb'];
+
     }
 
     // User methods -------------------------------------------
@@ -112,10 +126,23 @@ class IMAPAuth
      */
     function getUserData()
     {
+        $rval=array();
+        $logonEmail = $this->imapUsername . (empty($this->imapDomainName) ? '' : '@' . $this->imapDomainName);
+        if ( $this->imapAliasesFromDB === true )
+        {
+            $db = new DBEngine();
+            $this->imapUserAliases = $db->get_useraliases($logonEmail);
+        }
+        if ( empty($this->imapUserAliases) !== true )
+        {
+            $emailAddress = array_merge(array($logonEmail), $this->imapUserAliases);
+        } else {
+            $emailAddress = array($logonEmail);
+        }
         $rval = array(
-            'logonName' => $this->imapUsername,
+            'logonName' => $logonEmail,
             'firstName' => $this->imapUsername,
-            'emailAddress' => array($this->imapUsername . (empty($this->imapDomainName) ? '' : '@' . $this->imapDomainName))
+            'emailAddress' => $emailAddress,
         );
         return $rval;
     }

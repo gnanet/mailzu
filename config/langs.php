@@ -50,11 +50,12 @@ $languages = array(
     'it' => array('it([-_][[:alpha:]]{2})?|italian', 'it.lang.php', 'it', 'Italiano'),
     'pt_BR' => array('pt([-_]br)?|portuguese', 'pt_BR.lang.php', 'pt', 'Portuguese Brazilian'),
     'no_NB' => array('no([-_]nb)?|norsk bokm&aring;l', 'no_NB.lang.php', 'no', 'Norsk Bokm&aring;l'),
-    'pl'   => array('cs([-_][[:alpha:]]{2})?|polish', 'pl.lang.php', 'pl', 'Polski')
+    'pl'   => array('cs([-_][[:alpha:]]{2})?|polish', 'pl.lang.php', 'pl', 'Polski'),
 );
+global $languages;
 
-// Language files directory	
-@define('LANG_DIR', dirname(__FILE__) . '/../lang/');
+// Language files directory
+@define('LANG_DIR', realpath(dirname(__FILE__) . '/../lang/'));
 
 /**
  * Tries to determine the langauge for this user by
@@ -64,7 +65,7 @@ $languages = array(
  */
 function determine_language()
 {
-    global $conf;
+    global $languages,$conf;
     $lang = false;
 
     // Set the language
@@ -77,7 +78,11 @@ function determine_language()
     } else if ($lang = get_browser_lang()) {
         // Do nothing, it's done in the if
     } else {
-        $lang = $conf['app']['defaultLanguage'];
+        if ( is_array($conf) && array_key_exists('app',$conf) && array_key_exists('defaultLanguage',$conf['app']) ) {
+            $lang = $conf['app']['defaultLanguage'];
+        } else {
+            $lang = 'en_US';
+        }
     }
 
     return $lang;
@@ -87,20 +92,39 @@ function determine_language()
  * Loads the language file
  * @param none
  */
-function load_language_file()
+function load_language_file($lang)
 {
     global $languages;
-    global $lang;
+    global $conf;
+
+    if ( !is_array($languages) ) {
+        $languages = array(
+            'de' => array('de([-_][[:alpha:]]{2})?|german', 'de.lang.php', 'de', 'Deutsch'),
+            'en_US' => array('en([-_]us)?|english', 'en_US.lang.php', 'en', 'English US'),
+            'en_GB' => array('en([-_]gb)?|english', 'en_GB.lang.php', 'en', 'English GB'),
+            'es' => array('es([-_][[:alpha:]]{2})?|spanish', 'es.lang.php', 'es', 'Español'),
+            'cs' => array('cs([-_][[:alpha:]]{2})?|czech', 'cs.lang.php', 'cs', '&#268;esky'),
+            'fr' => array('fr([-_][[:alpha:]]{2})?|french', 'fr.lang.php', 'fr', 'Fran&ccedil;ais'),
+            'it' => array('it([-_][[:alpha:]]{2})?|italian', 'it.lang.php', 'it', 'Italiano'),
+            'pt_BR' => array('pt([-_]br)?|portuguese', 'pt_BR.lang.php', 'pt', 'Portuguese Brazilian'),
+            'no_NB' => array('no([-_]nb)?|norsk bokm&aring;l', 'no_NB.lang.php', 'no', 'Norsk Bokm&aring;l'),
+            'pl'   => array('cs([-_][[:alpha:]]{2})?|polish', 'pl.lang.php', 'pl', 'Polski')
+        );
+    }
 
     // Load the language file
-    if (isset($languages[$lang]) && file_exists(LANG_DIR . $languages[$lang][1])) {
-        include_once(LANG_DIR . $languages[$lang][1]);
+    if ( ! isset($lang) ) { echo "lang not set".PHP_EOL; };
+    if ( ! (is_array($languages) && array_key_exists($lang,$languages)) ) { echo "languages has no lang set".PHP_EOL; exit(); };
+
+    if (isset($languages[$lang]) && file_exists(LANG_DIR ."/". $languages[$lang][1])) {
+        include_once(LANG_DIR ."/". $languages[$lang][1]);
         global $charset;
         header("Content-Type: text/html; charset=$charset");
         header("Content-Language: {$languages[$lang][2]}");
     } else {
-        die('Could not load language file: ' . $languages[$lang][1]);
+        //echo "loading failed for >>".LANG_DIR ."/". $languages[$lang][1]."<<".PHP_EOL;
         setcookie('lang', '', time() - 2592000, '/' . basename($conf['app']['weburi']));
+        die('Could not load language file: ' . $languages[$lang][1].PHP_EOL);
     }
 }
 
@@ -133,16 +157,21 @@ function get_browser_lang()
  */
 function set_language($lang)
 {
-    global $languages;
-    global $conf;
+    global $languages, $conf;
 
     if (!isset($languages[$lang])) {
-        $lang = $conf['app']['defaultLanguage'];
+        if ( is_array($conf) && array_key_exists('app',$conf) && array_key_exists('defaultLanguage',$conf['app']) ) {
+            $lang = $conf['app']['defaultLanguage'];
+        } else {
+            $lang = 'en_US';
+        }
     }
 
     @session_start();
     setlocale(LC_ALL, $lang);
-    setcookie('lang', $lang, time() + 2592000, '/' . basename($conf['app']['weburi']));
+    if ( is_array($conf) && array_key_exists('app',$conf) ) {
+        setcookie('lang', $lang, time() + 2592000, '/' . basename($conf['app']['weburi']));
+    }
 }
 
 /**
