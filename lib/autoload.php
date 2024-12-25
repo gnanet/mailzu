@@ -3,11 +3,11 @@
  * This loads configuration, and calls other autoladers
  *
  * @author Gergely Nagy <gna@r-us.hu>
+ * @version 2024-12-24
  * @package mailzu-ng
  *
- * @version 2021-11-08
  *
- * Copyright (C) 2021 mailzu-ng
+ * Copyright (C) 2024 mailzu-ng
  * License: GPL, see LICENSE
  */
 
@@ -28,11 +28,6 @@ if (!( isset($conf) && is_array($conf) )) {
     echo "conf from ".BASE_DIR."/config/config.php not loaded".PHP_EOL;
     exit();
 }
-
-//Import PHPMailer classes into the global namespace
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
 
 /**
  * Pear
@@ -70,6 +65,15 @@ if ( @file_exists('../vendor/autoload.php') ) {
 } else if ( @file_exists(BASE_DIR . '/vendor/autoload.php') ) {
     require BASE_DIR . '/vendor/autoload.php';
 }
+
+/*
+ * This has to be placed AFTER composer autoloader!
+ * Import PHPMailer classes into the global namespace
+ *
+ */
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 
 if (!function_exists('is_countable')) {

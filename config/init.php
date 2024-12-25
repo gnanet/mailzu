@@ -41,7 +41,7 @@ if (! headers_sent()) {
     if(session_status() !== PHP_SESSION_ACTIVE) session_start();
 }
 
-$conf['app']['version'] = '0.11.mailzu-ng-php72-e85b008+1';
+$conf['app']['version'] = '0.11.mailzu-ng-php72-b1e7e3e+1';
 $conf['app']['footlink'] = 'https://github.com/gnanet/mailzu';
 
 include_once('constants.php');

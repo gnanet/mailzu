@@ -1,11 +1,14 @@
 <?php
 /**
  * IMAPAuth class
- * @version 2021-11-08
+ *
  * @Author Samuel Tran
+ * @version 2021-11-08
+ * @author Gergely Nagy <gna@r-us.hu>
+ * @version 2024-12-24
  * @package IMAPAuth
  *
- * Copyright (C) 2021 mailzu-ng
+ * Copyright (C) 2024 mailzu-ng
  * License: GPL, see LICENSE
  */
 /**

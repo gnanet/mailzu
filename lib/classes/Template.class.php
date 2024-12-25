@@ -4,10 +4,10 @@
  * This file provides output functions
  *
  * @author Gergely Nagy <gna@r-us.hu>
- * @version 2021-11-08
+ * @version 2024-12-24
  * @package Template
  *
- * Copyright (C) 2021 mailzu-ng
+ * Copyright (C) 2024 mailzu-ng
  * License: GPL, see LICENSE
  */
 /**

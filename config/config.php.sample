@@ -306,12 +306,12 @@ $conf['auth']['imap_use_aliasdb'] = false;
 // List of Super Admins
 // Super Admins can do anything mail admins can plus
 // change settings
-$conf['auth']['s_admins'] = array ('user1', 'user2');
+$conf['auth']['s_admins'] = array ('superuser1@the-domain.tld', 'superuser2@the-domain.tld');
 
 // List of Mail Admins
 // Mail Admins can see other users' spam and attachments
 // and can perform any action on them
-$conf['auth']['m_admins'] = array ();
+$conf['auth']['m_admins'] = array ('postmaster-user@the-domain.tld');
 
 // User login restriction (Does not affect admins)
 // If set to true, users will not be able to login. This is if you do
@@ -319,11 +319,14 @@ $conf['auth']['m_admins'] = array ();
 // view quarantines. 
 $conf['auth']['login_restriction'] = false;
 
-// User restriction exemption
+// User with login restriction !exemption!
 // List of users still allowed to login even if
 // $conf['auth']['login_restriction'] = true
 //
-$conf['auth']['restricted_users'] = array('user1', 'user2');
+// For example: trusted users, who have multiple email addresses,
+// and aliases. And they are educated to use the quarantine management
+// functions
+$conf['auth']['restricted_users'] = array('trusted-user1@the-domain.tld', 'trusted-user2@the-domain.tld');
 
 /**********
 * Miscellaneous Settings

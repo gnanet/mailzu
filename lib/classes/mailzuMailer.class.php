@@ -2,6 +2,11 @@
 
 /**
  * Use PHPMailer as a base class and extend it
+ *
+ * @author Gergely Nagy <gna@r-us.hu>
+ * @version 2024-12-24
+ * @package mailzuMailer
+ *
  */
 class mailzuMailer extends PHPMailer
 {
